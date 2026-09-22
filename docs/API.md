@@ -10,7 +10,7 @@ Quick reference for commonly used SharpCompress APIs.
 // Auto-detect format
 using (var reader = ReaderFactory.OpenReader(stream))
 {
-    // Works with Zip, Tar, GZip, Rar, 7Zip, etc.
+    // Works with Zip, Tar, GZip, Rar, etc. Reading 7Zip needs the Archive API
 }
 
 // Specific format - Archive API
@@ -256,7 +256,7 @@ using (var reader = ReaderFactory.OpenReader(stream))
 {
     while (reader.MoveToNextEntry())
     {
-        IArchiveEntry entry = reader.Entry;
+        IEntry entry = reader.Entry;
 
         if (!entry.IsDirectory)
         {
@@ -611,7 +611,6 @@ using (var writer = WriterFactory.OpenWriter(stream, ArchiveType.Tar, Compressio
 ArchiveType.Zip
 ArchiveType.Tar
 ArchiveType.GZip
-ArchiveType.BZip2
 ArchiveType.Rar
 ArchiveType.SevenZip
 ArchiveType.Arc
@@ -635,11 +634,11 @@ try
         archive.WriteToDirectory(@"C:\output");
     }
 }
-catch (PasswordRequiredException)
+catch (CryptographicException)
 {
     Console.WriteLine("Password required");
 }
-catch (InvalidArchiveException)
+catch (ArchiveException)
 {
     Console.WriteLine("Archive is invalid");
 }
